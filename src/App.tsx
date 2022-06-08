@@ -2,7 +2,10 @@ import React from 'react';
 import Router from './router';
 import {createGlobalStyle} from 'styled-components';
 
+
 const GlobalStyle = createGlobalStyle`
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap');
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -34,8 +37,9 @@ footer, header, hgroup, main, menu, nav, section {
 }
 body {
   line-height: 1;
-  background-color:${props=>props.theme.backgroundColor};
+  background-color:${props => props.theme.backgroundColor};
   color:${props=>props.theme.color};
+  font-family: 'PT Sans', sans-serif;
 }
 a {
   text-decoration:none;
