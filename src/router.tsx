@@ -7,7 +7,8 @@ export default function Router(){
     <BrowserRouter>
         <Routes>
             <Route path='/' element={<Coins />} />
-            <Route path=':coinId' element={<Coin />} />
+            <Route path='/:coinId/*' element={<Coin />}>
+            </Route>
         </Routes>
     </BrowserRouter>)
 }

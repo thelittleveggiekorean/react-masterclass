@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 
@@ -30,12 +30,16 @@ const Coin = styled.li`
     margin-bottom:1rem;
     border-radius:10px;
         a {
+            display:flex;
+            align-items: center;
             color:inherit;
-            display:block;
             height:100%;
             padding:1rem;
+            transition:color .2s ease-in-out;
+            
             &:hover {
             color:${props => props.theme.accentColor};
+           
         }
 `
 
@@ -54,7 +58,11 @@ const Loading = styled.div`
     color:${props => props.theme.color};
     text-align:center;
 `
-
+const CoinIcon = styled.img`
+    width:20px;
+    height:20px;
+    margin-right:10px;
+`
 
 
 function Coins(){
@@ -65,11 +73,12 @@ function Coins(){
         (async () => {
             const response = await fetch("https://api.coinpaprika.com/v1/coins");
             const json = await response.json();
-            console.log(json.slice(0, 100));
             setCoins(json.slice(0, 100));
             setLoading(false);
         })();
     }, [])
+
+    
 
     return (
     <>
@@ -80,7 +89,9 @@ function Coins(){
             <CoinList>
                 {coins.map(coin => 
                     <Coin key={coin.id}>
-                        <Link to={coin.symbol}>{coin.name} &rarr;</Link>
+                        <Link to={coin.id} state={coin.name}>
+                            <CoinIcon src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`} />{coin.name} &rarr;
+                        </Link>
                     </Coin>
                 )}
             </CoinList>
