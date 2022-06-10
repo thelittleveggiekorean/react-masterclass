@@ -79,7 +79,6 @@ const Tab = styled.button<{isActive: boolean}>`
 }`
 
 
-
 interface IInfo {
     id: string;
     name: string;
@@ -184,12 +183,12 @@ function Coin(){
                 </OverviewItem>
             </Overview>
             <Tabs>
-                <Tab isActive={priceMatch !== null}><Link to={`/${coinId}/price`}>Price</Link></Tab>
                 <Tab isActive={chartMatch !== null}><Link to={`/${coinId}/chart`}>Chart</Link></Tab>
+                <Tab isActive={priceMatch !== null}><Link to={`/${coinId}/price`}>Price</Link></Tab>
             </Tabs>
             <Routes>
                 <Route path='/price' element={<Price />}/>
-                <Route path='/chart' element={<Chart />}/>
+                <Route path='/chart' element={<Chart coinId={coinId!} />}/>
             </Routes>
         </Wrapper> 
         }
