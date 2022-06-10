@@ -15,6 +15,6 @@ export async function fetchCoinTickers (coinId?:string) {
 
 export async function fetchCoinChart(coin_id:string){
     const endDate = Math.floor(Date.now() / 1000);
-    const startDate = endDate - 60 * 60 * 24 * 6;
+    const startDate = endDate - 60 * 60;
     return fetch(`${BASE_URL}/coins/${coin_id}/ohlcv/historical?start=${startDate}&end=${endDate}`).then((response) => response.json());
 }

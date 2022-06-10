@@ -1,7 +1,8 @@
-import React from 'react';
-import Router from './router';
-import {createGlobalStyle} from 'styled-components';
-import { ReactQueryDevtools } from 'react-query/devtools'
+import React, { useState } from "react";
+import Router from "./router";
+import { ReactQueryDevtools } from "react-query/devtools";
+import { createGlobalStyle, ThemeProvider } from "styled-components";
+import { darkTheme, lightTheme } from "./theme";
 
 const GlobalStyle = createGlobalStyle`
 html, body, div, span, applet, object, iframe,
@@ -35,13 +36,15 @@ footer, header, hgroup, main, menu, nav, section {
 }
 body {
   line-height: 1;
-  background-color:${props => props.theme.backgroundColor};
-  color:${props=>props.theme.color};
+  background-color:${(props) => props.theme.backgroundColor};
+  color:${(props) => props.theme.color};
   font-family: 'PT Sans', sans-serif;
 }
 a {
   text-decoration:none;
+  color:inherite;
 }
+
 menu, ol, ul {
   list-style: none;
 }
@@ -57,14 +60,19 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-`
+`;
 
 function App() {
+  const [isDark, setIsDark] = useState(false);
+  const toggleDark = () => setIsDark((current) => !current);
+
   return (
     <>
-      <GlobalStyle />
-      <Router />
-      <ReactQueryDevtools initialIsOpen={true} />
+      <ThemeProvider theme={isDark ? lightTheme : darkTheme}>
+        <GlobalStyle />
+        <Router toggleDark={toggleDark} />
+        <ReactQueryDevtools initialIsOpen={true} />
+      </ThemeProvider>
     </>
   );
 }
