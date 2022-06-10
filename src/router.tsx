@@ -8,7 +8,7 @@ interface IToggleProps {
 
 export default function Router({ toggleDark }: IToggleProps) {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Routes>
         <Route path="/" element={<Coins toggleDark={toggleDark} />} />
         <Route path="/:coinId/*" element={<Coin />} />
