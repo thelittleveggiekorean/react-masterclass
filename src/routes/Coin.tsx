@@ -1,9 +1,9 @@
-import {useParams, useLocation, Route, Routes, Link, useMatch} from 'react-router-dom';
-import {useState, useEffect} from 'react';
+import {useParams, Route, Routes, Link, useMatch} from 'react-router-dom';
 import styled from 'styled-components';
 import Chart from './chart';
 import Price from './price';
-
+import { useQuery } from 'react-query';
+import {fetchCoinInfo, fetchCoinTickers} from '../api';
 
 
 type Params = {
@@ -141,55 +141,46 @@ function Coin(){
     const priceMatch = useMatch(`/:coinId/price`);
     const chartMatch = useMatch(`/:coinId/chart`);
 
-
-    const [loading, setLoading] = useState(true);
     const {coinId} = useParams<Params>();
-    const coinName = useLocation().state as string;
 
-    const [info, setInfo] = useState<IInfo>();
-    const [price, setPrice] = useState<IPrice>();
+    const {isLoading : infoLoading, data : infoData} = useQuery<IInfo>(["info", coinId], () => fetchCoinInfo(coinId));
+    const {isLoading : tickersLoading, data : tickersData} = useQuery<IPrice>(["tickers", coinId], () => fetchCoinTickers(coinId));
 
-    useEffect(()=>{
-        (async () => {
-            const infoData = (await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)).json();
-            setInfo(await infoData);
-           
-            const priceData = (await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)).json();
-            setPrice(await priceData);
-            setLoading(false);
 
-        })();
-    }, [coinId])
+
+    const loading = infoLoading || tickersLoading;
+  
+    
     return <>
         <Header>
-            <Title>{info?.name}</Title>
+            <Title>{infoData?.name}</Title>
         </Header>
         {loading ? "Loading..." : <Wrapper>
             <Overview>
                 <OverviewItem>
                     <span>RANK</span>
-                    <span>{price?.rank}</span>
+                    <span>{tickersData?.rank}</span>
                 </OverviewItem>
                 <OverviewItem>
                     <span>SYMBOL</span>
-                    <span>{price?.symbol}</span>
+                    <span>{tickersData?.symbol}</span>
                 </OverviewItem>
                 <OverviewItem>
                     <span>OPEN SOURCE</span>
-                    <span>{info?.open_source ? "YES" : "NO"}</span>
+                    <span>{infoData?.open_source ? "YES" : "NO"}</span>
                 </OverviewItem>
             </Overview>
             <Description>
-                {info?.description}
+                {infoData?.description}
             </Description>
             <Overview>
                 <OverviewItem>
                     <span>TOTAL SUPPLY</span>
-                    <span>{price?.total_supply}</span>
+                    <span>{tickersData?.total_supply}</span>
                 </OverviewItem>
                 <OverviewItem>
                     <span>MAX SUPPLY</span>
-                    <span>{price?.max_supply}</span>
+                    <span>{tickersData?.max_supply}</span>
                 </OverviewItem>
             </Overview>
             <Tabs>
