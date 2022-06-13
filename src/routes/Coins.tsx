@@ -2,20 +2,20 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import { fetchCoins } from "../api";
+import { isDarkAtom } from "../atoms";
+import { useSetRecoilState } from "recoil";
 
-interface ICoinsProps {
-  toggleDark: () => void;
-}
+interface ICoinsProps {}
 
-const ModeButton = styled.button`
-  background-color: ${(props) => props.theme.boxColor};
-  border: none;
-  border-radius: 10px;
-  margin-left: 1rem;
-  color: ${(props) => props.theme.color};
-  padding: 0.2rem 1rem;
-  cursor: pointer;
-`;
+// const ModeButton = styled.button`
+//   background-color: ${(props) => props.theme.boxColor};
+//   border: none;
+//   border-radius: 10px;
+//   margin-left: 1rem;
+//   color: ${(props) => props.theme.color};
+//   padding: 0.2rem 1rem;
+//   cursor: pointer;
+// `;
 const Header = styled.header`
   height: 30vh;
   display: flex;
@@ -77,14 +77,16 @@ const CoinIcon = styled.img`
   margin-right: 10px;
 `;
 
-function Coins({ toggleDark }: ICoinsProps) {
+function Coins({}: ICoinsProps) {
   const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins);
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
 
   return (
     <>
       <Header>
         <Title>Coins</Title>
-        <ModeButton onClick={toggleDark}>Change Mode</ModeButton>
+        <button onClick={toggleDarkAtom}>Change Mode</button>
       </Header>
       {isLoading ? (
         <Loading>Loading...</Loading>
